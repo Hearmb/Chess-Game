@@ -24,14 +24,22 @@ temp=''
 chars=['a','b','c','d','e','f','g','h']
 src=''
 
+p=''
+q=''
+key1=''
+
 firstclick=True 
 allButtons={}
 	
-def onClick(event):
+def onClick(widget,mlist):
+	global firstclick
+	global p
+	global q
+	global key1
 	#widget.configure(bg='blue')
 	if(firstclick):
-		firstclick=false
-		bt=str(event.widget)
+		firstclick=False
+		bt=str(widget)
 		k=bt[8:]
 		if(k==''):
 			p=q=0
@@ -49,84 +57,124 @@ def onClick(event):
 			else:
 				q=q-1
 			#print(p,q)
-			key='b'+str(p)+str(q)
+			key1='b'+str(p)+str(q)
 		tn=(8-p)
 		global src
 		src=chars[q]+str(tn)
 		print(src)
-		if(allButtons[key]['img']!='null'):
+		if(allButtons[key1]['img']!='null'):
 			global temp
-			temp=allButtons[key]['img']
-			allButtons[key]['img']='null'
-			event.widget.configure(image='',height=6,width=12)
+			temp=allButtons[key1]['img']
+			allButtons[key1]['img']='null'
+			mlist[p][q].configure(image='',height=6,width=12)
 
 	else:
-		firstclick=False
-		bt=str(event.widget)
+		firstclick=True
+		bt=str(widget)
 		k=bt[8:]
 		if(k==''):
-			p=q=0
+			ps=qs=0
 			key='b00'
 		elif(k=='64'):
 			key='b77'
-			p=q=7
+			ps=qs=7
 		else:
 			k=int(k)
-			p=k//8
-			q=k%8
-			if q==0:
-				p=p-1
-				q=7
+			ps=k//8
+			qs=k%8
+			if qs==0:
+				ps=ps-1
+				qs=7
 			else:
-				q=q-1
+				qs=qs-1
 			#print(p,q)
-			key='b'+str(p)+str(q)
-		tnn=(8-p)
+			key='b'+str(ps)+str(qs)
+		tnn=(8-ps)
 		global des
-		des=chars[q]+str(tnn)
+		des=chars[qs]+str(tnn)
 		print(src,des)
 		#print(des)
 		move=chess.Move.from_uci(str(src)+str(des))
 		if(board.is_legal(move)):
+			board.push(move)
 			print("Inside Legal")
 			if(temp=='BR'):
-				event.widget.configure(image=BR,height=90,width=90)
+				mlist[ps][qs].configure(image=BR,height=90,width=90)
 				allButtons[key]['img']='BR'
 			elif(temp=='BN'):
-				event.widget.configure(image=BN,height=90,width=90)
+				mlist[ps][qs].configure(image=BN,height=90,width=90)
 				allButtons[key]['img']='BN'
 			elif(temp=='BB'):
-				event.widget.configure(image=BB,height=90,width=90)
+				mlist[ps][qs].configure(image=BB,height=90,width=90)
 				allButtons[key]['img']='BB'
 			elif(temp=='BK'):
-				event.widget.configure(image=BK,height=90,width=90)
+				mlist[ps][qs].configure(image=BK,height=90,width=90)
 				allButtons[key]['img']='BK'
 			elif(temp=='BQ'):
-				event.widget.configure(image=BQ,height=90,width=90)
+				mlist[ps][qs].configure(image=BQ,height=90,width=90)
 				allButtons[key]['img']='BQ'
 			elif(temp=='BP'):
-				event.widget.configure(image=BP,height=90,width=90)
+				mlist[ps][qs].configure(image=BP,height=90,width=90)
 				allButtons[key]['img']='BP'
 			elif(temp=='WR'):
-				event.widget.configure(image=WR,height=90,width=90)
+				mlist[ps][qs].configure(image=WR,height=90,width=90)
 				allButtons[key]['img']='WR'
 			elif(temp=='WN'):
-				event.widget.configure(image=WN,height=90,width=90)
+				mlist[ps][qs].configure(image=WN,height=90,width=90)
 				allButtons[key]['img']='WN'
 			elif(temp=='WB'):
-				event.widget.configure(image=WB,height=90,width=90)
+				mlist[ps][qs].configure(image=WB,height=90,width=90)
 				allButtons[key]['img']='WB'
 			elif(temp=='WK'):
-				event.widget.configure(image=WK,height=90,width=90)
+				mlist[ps][qs].configure(image=WK,height=90,width=90)
 				allButtons[key]['img']='WK'
 			elif(temp=='WQ'):
-				event.widget.configure(image=WQ,height=90,width=90)
+				mlist[ps][qs].configure(image=WQ,height=90,width=90)
 				allButtons[key]['img']='WQ'
 			elif(temp=='WP'):
-				event.widget.configure(image=WP,height=90,width=90)
+				mlist[ps][qs].configure(image=WP,height=90,width=90)
 				allButtons[key]['img']='WP'
+			if (board.is_checkmate()):
+				print("Checkmate")
+		else:
 
-	
+			if(temp=='BR'):
+				mlist[p][q].configure(image=BR,height=90,width=90)
+				allButtons[key1]['img']='BR'
+			elif(temp=='BN'):
+				mlist[p][q].configure(image=BN,height=90,width=90)
+				allButtons[key1]['img']='BN'
+			elif(temp=='BB'):
+				mlist[p][q].configure(image=BB,height=90,width=90)
+				allButtons[key1]['img']='BB'
+			elif(temp=='BK'):
+				mlist[p][q].configure(image=BK,height=90,width=90)
+				allButtons[key1]['img']='BK'
+			elif(temp=='BQ'):
+				mlist[p][q].configure(image=BQ,height=90,width=90)
+				allButtons[key1]['img']='BQ'
+			elif(temp=='BP'):
+				mlist[p][q].configure(image=BP,height=90,width=90)
+				allButtons[key1]['img']='BP'
+			elif(temp=='WR'):
+				mlist[p][q].configure(image=WR,height=90,width=90)
+				allButtons[key1]['img']='WR'
+			elif(temp=='WN'):
+				mlist[p][q].configure(image=WN,height=90,width=90)
+				allButtons[key1]['img']='WN'
+			elif(temp=='WB'):
+				mlist[p][q].configure(image=WB,height=90,width=90)
+				allButtons[key1]['img']='WB'
+			elif(temp=='WK'):
+				mlist[p][q].configure(image=WK,height=90,width=90)
+				allButtons[key1]['img']='WK'
+			elif(temp=='WQ'):
+				mlist[p][q].configure(image=WQ,height=90,width=90)
+				allButtons[key1]['img']='WQ'
+			elif(temp=='WP'):
+				mlist[p][q].configure(image=WP,height=90,width=90)
+				allButtons[key1]['img']='WP'
+			
 
 def drawchess():
 	#buttons names
@@ -155,8 +203,8 @@ def drawchess():
 			else:
 				col='white'
 			mlist[i][j]=tkinter.Button(root,state='normal',height=6,width=12,bg=col,activebackground=col)
-			mlist[i][j].bind('<Button-1>', onClick)
-			#mlist[i][j].config(command=lambda widget=mlist[i][j]: onClick(widget,mlist))
+			#mlist[i][j].bind('<Button-1>', onClick)
+			mlist[i][j].config(command=lambda widget=mlist[i][j]: onClick(widget,mlist))
 			mlist[i][j].grid(row=i,column=j)
 			if i==0:
 				if (j==0 or j==7):
