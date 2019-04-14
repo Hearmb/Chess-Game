@@ -1,4 +1,7 @@
 import tkinter
+import chess
+
+board=chess.Board()
 
 root = tkinter.Tk()
 root.geometry('1000x1000')
@@ -18,8 +21,12 @@ WR = tkinter.PhotoImage(file="WR.png")
 WQ = tkinter.PhotoImage(file="WQ.png")
 WN = tkinter.PhotoImage(file="WN.png")
 temp=''
+chars=['a','b','c','d','e','f','g','h']
+src=''
+
+allButtons={}
 	
-def onClick(widget,allButtons,mlist):
+def onClick(widget,mlist):
 	#widget.configure(bg='blue')
 	bt=str(widget)
 	k=bt[8:]
@@ -40,6 +47,10 @@ def onClick(widget,allButtons,mlist):
 			q=q-1
 		#print(p,q)
 		key='b'+str(p)+str(q)
+	tn=(8-p)
+	global src
+	src=chars[q]+str(tn)
+	print(src)
 	if(allButtons[key]['img']!='null'):
 		global temp
 		temp=allButtons[key]['img']
@@ -47,34 +58,74 @@ def onClick(widget,allButtons,mlist):
 		mlist[p][q].configure(image='',height=6,width=12)
 
 def handler(event):
-	print(temp)
-	if(temp=='BR'):
-		event.widget.configure(image=BR,height=90,width=90)
-	elif(temp=='BN'):
-		event.widget.configure(image=BN,height=90,width=90)
-	elif(temp=='BB'):
-		event.widget.configure(image=BB,height=90,width=90)
-	elif(temp=='BK'):
-		event.widget.configure(image=BK,height=90,width=90)
-	elif(temp=='BQ'):
-		event.widget.configure(image=BQ,height=90,width=90)
-	elif(temp=='BP'):
-		event.widget.configure(image=BP,height=90,width=90)
+	#print(temp)
+	bt=str(event.widget)
+	k=bt[8:]
+	if(k==''):
+		p=q=0
+		key='b00'
+	elif(k=='64'):
+		key='b77'
+		p=q=7
+	else:
+		k=int(k)
+		p=k//8
+		q=k%8
+		if q==0:
+			p=p-1
+			q=7
+		else:
+			q=q-1
+		#print(p,q)
+		key='b'+str(p)+str(q)
+	tnn=(8-p)
+	global des
+	global src
+	des=chars[q]+str(tnn)
+	print(src)
+	print(des)
+	move=chess.Move.from_uci(src+des)
+	if(board.is_legal(move)):
+		print("Inside Legal")
+		if(temp=='BR'):
+			event.widget.configure(image=BR,height=90,width=90)
+			allButtons[key]['img']='BR'
+		elif(temp=='BN'):
+			event.widget.configure(image=BN,height=90,width=90)
+			allButtons[key]['img']='BN'
+		elif(temp=='BB'):
+			event.widget.configure(image=BB,height=90,width=90)
+			allButtons[key]['img']='BB'
+		elif(temp=='BK'):
+			event.widget.configure(image=BK,height=90,width=90)
+			allButtons[key]['img']='BK'
+		elif(temp=='BQ'):
+			event.widget.configure(image=BQ,height=90,width=90)
+			allButtons[key]['img']='BQ'
+		elif(temp=='BP'):
+			event.widget.configure(image=BP,height=90,width=90)
+			allButtons[key]['img']='BP'
+		elif(temp=='WR'):
+			event.widget.configure(image=WR,height=90,width=90)
+			allButtons[key]['img']='WR'
+		elif(temp=='WN'):
+			event.widget.configure(image=WN,height=90,width=90)
+			allButtons[key]['img']='WN'
+		elif(temp=='WB'):
+			event.widget.configure(image=WB,height=90,width=90)
+			allButtons[key]['img']='WB'
+		elif(temp=='WK'):
+			event.widget.configure(image=WK,height=90,width=90)
+			allButtons[key]['img']='WK'
+		elif(temp=='WQ'):
+			event.widget.configure(image=WQ,height=90,width=90)
+			allButtons[key]['img']='WQ'
+		elif(temp=='WP'):
+			event.widget.configure(image=WP,height=90,width=90)
+			allButtons[key]['img']='WP'
+	src=''
+	des=''
 
-	elif(temp=='WR'):
-		event.widget.configure(image=WR,height=90,width=90)
-	elif(temp=='WN'):
-		event.widget.configure(image=WN,height=90,width=90)
-	elif(temp=='WB'):
-		event.widget.configure(image=WB,height=90,width=90)
-	elif(temp=='WK'):
-		event.widget.configure(image=WK,height=90,width=90)
-	elif(temp=='WQ'):
-		event.widget.configure(image=WQ,height=90,width=90)
-	elif(temp=='WP'):
-		event.widget.configure(image=WP,height=90,width=90)
-
-	
 def drawchess():
 	#buttons names
 	mlist=[]
@@ -86,7 +137,7 @@ def drawchess():
 		mlist.append(row)
 
 	#button attributes
-	allButtons={}
+	global allButtons
 	for i in range(8):
 		for j in range(8):
 			d={mlist[i][j]:{'img':'null','imgtype':'null'}}
@@ -102,7 +153,7 @@ def drawchess():
 			else:
 				col='white'
 			mlist[i][j]=tkinter.Button(root,state='normal',height=6,width=12,bg=col,activebackground=col)
-			mlist[i][j].config(command=lambda widget=mlist[i][j]: onClick(widget,allButtons,mlist))
+			mlist[i][j].config(command=lambda widget=mlist[i][j]: onClick(widget,mlist))
 			mlist[i][j].bind('<Double-Button-1>', handler)
 			mlist[i][j].grid(row=i,column=j)
 			if i==0:
