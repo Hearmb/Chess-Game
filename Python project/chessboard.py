@@ -43,7 +43,7 @@ def onClick(widget,mlist):
 		k=bt[8:]
 		if(k==''):
 			p=q=0
-			key='b00'
+			key1='b00'
 		elif(k=='64'):
 			key='b77'
 			p=q=7
@@ -61,7 +61,7 @@ def onClick(widget,mlist):
 		tn=(8-p)
 		global src
 		src=chars[q]+str(tn)
-		print(src)
+		#print(src)
 		if(allButtons[key1]['img']!='null'):
 			global temp
 			temp=allButtons[key1]['img']
@@ -95,7 +95,7 @@ def onClick(widget,mlist):
 		print(src,des)
 		#print(des)
 		move=chess.Move.from_uci(str(src)+str(des))
-		if(board.is_legal(move)):
+		if(board.is_legal(move) and src!=des):
 			board.push(move)
 			print("Inside Legal")
 			if(temp=='BR'):
