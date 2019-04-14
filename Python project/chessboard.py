@@ -1,5 +1,6 @@
 import tkinter
 import chess
+from tkinter import messagebox
 
 board=chess.Board()
 
@@ -134,8 +135,15 @@ def onClick(widget,mlist):
 			elif(temp=='WP'):
 				mlist[ps][qs].configure(image=WP,height=90,width=90)
 				allButtons[key]['img']='WP'
-			if (board.is_checkmate()):
-				print("Checkmate")
+			if (board.is_gameover()):
+				if(board.is_checkmate()):
+					print("Checkmate")
+					if(board.turn):
+						messagebox.showinfo("CHECKMATE","Black Won")
+					else:
+						messagebox.showinfo("CHECKMATE","White Won")
+				else:
+					messagebox.showinfo("Draw","Nobody Won")
 		else:
 
 			if(temp=='BR'):
